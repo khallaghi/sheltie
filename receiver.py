@@ -1,10 +1,10 @@
 import pika
 import json
 from k8s.client import handle_request
-credentials = pika.PlainCredentials('guest', 'guest')
+credentials = pika.PlainCredentials('test', 'test')
 parameters = pika.ConnectionParameters(host='localhost',
                                        port=5672,
-                                       virtual_host='/sheltie',
+                                       virtual_host='/',
                                        credentials=credentials)
 connection = pika.BlockingConnection(parameters)
 channel = connection.channel()
@@ -14,7 +14,7 @@ channel.queue_declare(queue='command', durable=True)
 
 def callback(ch, method, properties, body):
     print(" [x] Received %r" % body)
-    msg = json.load(body)
+    msg = json.loads(body)
     handle_request(msg)
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
