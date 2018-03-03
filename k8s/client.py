@@ -83,14 +83,9 @@ def delete_deployment(msg):
 
 
 def handle_request(msg):
-<<<<<<< HEAD
-    if msg.kind == KIND['JOB']:
-        if msg.command == COMMAND['CREATE']:
-=======
     print(msg)
     if msg['kind'] == KIND['JOB']:
         if msg['command'] == COMMAND['CREATE']:
->>>>>>> 5b747a296368840f9b8f178118d5c347f279e2b6
             create_job(msg)
         if msg['command'] == COMMAND['DELETE']:
             delete_job(msg)
