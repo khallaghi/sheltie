@@ -22,6 +22,7 @@ COMMAND = {
     msg is a json message that received from rabbitmq 
     with this structure.
     msg = {
+        "id": "",
         "file_name": "video-ftp.yaml",
         "kind": "job",
         "namespace": "default"
@@ -83,7 +84,6 @@ def delete_deployment(msg):
 
 
 def handle_request(msg):
-    initiate_configs()
     if msg.kind == KIND['JOB']:
         if msg.command == COMMAND['CREATE']:
             create_job(msg)
