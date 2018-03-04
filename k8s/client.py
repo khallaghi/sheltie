@@ -7,16 +7,11 @@ from kubernetes import config as k8s_config
 from constants import KIND, COMMAND
 import config
 import logging
-
+FORMAT = '%(asctime)s %(name)-12s %(levelname)-8s in function: %(func_name) \n' +\
+        ' k8s_api_instance: %(api_instance)\n ' +\
+        'k8s_api_func: %(api_func)\n message: %(message)s'
+logging.basicConfig(format=FORMAT)
 logger = logging.getLogger()
-handler = logging.StreamHandler()
-formatter = logging.Formatter(
-        '%(asctime)s %(name)-12s %(levelname)-8s in function: %(func_name) \n' +
-        ' k8s_api_instance: %(api_instance)\n ' +
-        'k8s_api_func: %(api_func)\n message: %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
 
 
 ROOT_DIR = config.DEFAULT['ROOT_DIR']
@@ -39,7 +34,7 @@ def create_job(msg):
             'api_func':'create_namespaced_job',
             'func_name':'create_job'
         }
-        logger.error("error_message: %s", e, extra=extra)
+        #logger.error("error_message: %s", e, extra=extra)
         raise e
 
 
@@ -56,7 +51,7 @@ def delete_job(msg):
             'api_func':'delete_namespaced_job',
             'func_name':'delete_job'
         }
-        logger.error("error_message: %s", e, extra=extra)
+        #logger.error("error_message: %s", e, extra=extra)
         raise e
 
 
@@ -73,7 +68,7 @@ def create_deployment(msg):
             'api_func': 'create_namespaced_deployment ',
             'func_name': 'create_deployment'
         }
-        logger.error("error_message: %s", e, extra=extra)
+        #logger.error("error_message: %s", e, extra=extra)
         raise e
 
 
@@ -90,18 +85,21 @@ def delete_deployment(msg):
             'api_func': 'delete_namespaced_deployment',
             'func_name': 'delete_deployment'
         }
-        logger.error("error_message: %s", e, extra=extra)
+        #logger.error("error_message: %s", e, extra=extra)
         raise e
 
 
 def handle_request(msg):
-    if msg.kind == KIND['JOB']:
-        if msg.command == COMMAND['CREATE']:
-            return create_job(msg)
-        if msg.command == COMMAND['DELETE']:
-            return delete_job(msg)
-    if msg.kind == KIND['DEPLOYMENT']:
-        if msg.command == COMMAND['CREATE']:
-            return create_deployment(msg)
-        if msg.command == COMMAND['DELETE']:
-            return delete_deployment(msg)
+    try:
+        if msg.kind == KIND['JOB']:
+            if msg.command == COMMAND['CREATE']:
+                return create_job(msg)
+            if msg.command == COMMAND['DELETE']:
+                return delete_job(msg)
+        if msg.kind == KIND['DEPLOYMENT']:
+            if msg.command == COMMAND['CREATE']:
+                return create_deployment(msg)
+            if msg.command == COMMAND['DELETE']:
+                return delete_deployment(msg)
+    except:
+        pass
