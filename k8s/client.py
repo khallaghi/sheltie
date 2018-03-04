@@ -4,38 +4,25 @@ import yaml
 from kubernetes.client.rest import ApiException
 from kubernetes import client
 from kubernetes import config as k8s_config
-from pprint import pprint
-import configparser
-from message import Success, Failure
-from mq.send import send_message
+from constants import KIND, COMMAND
+import config
+import logging
 
-KIND = {
-    'JOB': 'job',
-    'DEPLOYMENT': 'deployment'
-}
-
-COMMAND = {
-    'DELETE': 'delete',
-    'CREATE': 'create'
-}
-
-'''
-    msg is a json message that received from rabbitmq 
-    with this structure.
-    msg = {
-        "id": "",
-        "file_name": "video-ftp.yaml",
-        "kind": "job",
-        "namespace": "default"
-    } 
-    
-'''
-config = configparser.ConfigParser()
-config.read('config.ini')
-ROOT_DIR = config['DEFAULT']['ROOT_DIR']
+logger = logging.getLogger()
+handler = logging.StreamHandler()
+formatter = logging.Formatter(
+        '%(asctime)s %(name)-12s %(levelname)-8s in function: %(func_name) \n'
+        ' k8s_api_instance: %(api_instance)\n '
+        'k8s_api_func: %(api_func)\n message: %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
 
 
-kubectl_config = config['DEFAULT']['KUBECTL_CONFIG']
+ROOT_DIR = config.DEFAULT['ROOT_DIR']
+
+
+kubectl_config = config.DEFAULT['KUBECTL_CONFIG']
 k8s_config.load_kube_config(os.path.join(kubectl_config))
 
 
@@ -45,10 +32,13 @@ def create_job(msg):
     api_instance = client.BatchV1Api(client.ApiClient())
     try:
         api_response = api_instance.create_namespaced_job(msg.namespace, yaml_conf)
-        pprint(api_response)
-        send_message(Success(msg.id))
+        logger.info(api_response)
     except ApiException as e:
-        send_message(Failure(msg.id, "Exception when calling BatchV1Api->create_namespaced_job: %s\n" % e))
+        logger.error("error_message: %s", e,
+                     api_instance='BatchV1Api',
+                     api_func='create_namespaced_job',
+                     func_name='create_job')
+        raise e
 
 
 def delete_job(msg):
@@ -57,11 +47,13 @@ def delete_job(msg):
     api_instance = client.BatchV1Api(client.ApiClient())
     try:
         api_response = api_instance.delete_namespaced_job(msg.name, msg.namespace, yaml_conf)
-        send_message(Success(msg.id))
-        pprint(api_response)
+        logger.info(api_response)
     except ApiException as e:
-        send_message(Failure(msg.id, "Exception when calling BatchV1Api->create_namespaced_job: %s\n" % e))
-        print("Exception when calling BatchV1Api->create_namespaced_job: %s\n" % e)
+        logger.error("error_message: %s", e,
+                     api_instance='BatchV1Api',
+                     api_func='delete_namespaced_job',
+                     func_name='delete_job')
+        raise e
 
 
 def create_deployment(msg):
@@ -70,11 +62,13 @@ def create_deployment(msg):
     k8s_beta = client.ExtensionsV1beta1Api()
     try:
         api_response = k8s_beta.create_namespaced_deployment(msg.namespace, yaml_conf)
-        send_message(Success(msg.id))
-        pprint(api_response)
+        logger.info(api_response)
     except ApiException as e:
-        send_message(Failure(msg.id, "Exception when calling BatchV1Api->create_namespaced_job: %s\n" % e))
-        print("Exception when calling BatchV1Api->create_namespaced_job: %s\n" % e)
+        logger.error("error_message: %s", e,
+                     api_instance='ExtensionsV1beta1Api',
+                     api_func='create_namespaced_deployment ',
+                     func_name='create_deployment')
+        raise e
 
 
 def delete_deployment(msg):
@@ -83,22 +77,23 @@ def delete_deployment(msg):
     k8s_beta = client.ExtensionsV1beta1Api()
     try:
         api_response = k8s_beta.delete_namespaced_deployment(msg.name, msg.namespace, yaml_conf)
-        send_message(Success(msg.id))
-        pprint(api_response)
+        logger.info(api_response)
     except ApiException as e:
-        send_message(Failure(msg.id, "Exception when calling BatchV1Api->create_namespaced_job: %s\n" % e))
-        print("Exception when calling BatchV1Api->create_namespaced_job: %s\n" % e)
+        logger.error("error_message: %s", e,
+                     api_instance='ExtensionsV1beta1Api',
+                     api_func='delete_namespaced_deployment',
+                     func_name='delete_deployment')
+        raise e
 
 
 def handle_request(msg):
-    print(msg)
     if msg.kind == KIND['JOB']:
         if msg.command == COMMAND['CREATE']:
-            create_job(msg)
+            return create_job(msg)
         if msg.command == COMMAND['DELETE']:
-            delete_job(msg)
+            return delete_job(msg)
     if msg.kind == KIND['DEPLOYMENT']:
         if msg.command == COMMAND['CREATE']:
-            create_deployment(msg)
+            return create_deployment(msg)
         if msg.command == COMMAND['DELETE']:
-            delete_deployment(msg)
+            return delete_deployment(msg)

@@ -1,27 +1,20 @@
 import pika
-import json
-from k8s.client import handle_request
-from message import Message
-
-credentials = pika.PlainCredentials('test', 'test')
-parameters = pika.ConnectionParameters(host='localhost',
-                                       port=5672,
-                                       virtual_host='/',
-                                       credentials=credentials)
-connection = pika.BlockingConnection(parameters)
-channel = connection.channel()
-
-channel.queue_declare(queue='command', durable=True)
+import config
 
 
-def callback(ch, method, properties, body):
-    print(" [x] Received %r" % body)
-    msg = json.loads(body)
-    handle_request(Message(**msg))
-    ch.basic_ack(delivery_tag=method.delivery_tag)
+def receiver(callback, queue_name):
+    credentials = pika.PlainCredentials(config.MQ_CONFIG['user'], config.MQ_CONFIG['pass'])
+    parameters = pika.ConnectionParameters(host=config.MQ_CONFIG['host'],
+                                           port=config.MQ_CONFIG['port'],
+                                           virtual_host=config.MQ_CONFIG['vhost'],
+                                           credentials=credentials)
+    connection = pika.BlockingConnection(parameters)
+    channel = connection.channel()
 
-channel.basic_qos(prefetch_count=1)
-channel.basic_consume(callback,
-                      queue='command')
+    channel.queue_declare(queue=queue_name, durable=True)
 
-channel.start_consuming()
+    channel.basic_qos(prefetch_count=1)
+    channel.basic_consume(callback,
+                          queue=queue_name)
+
+    channel.start_consuming()
