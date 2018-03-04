@@ -11,8 +11,8 @@ import logging
 logger = logging.getLogger()
 handler = logging.StreamHandler()
 formatter = logging.Formatter(
-        '%(asctime)s %(name)-12s %(levelname)-8s in function: %(func_name) \n'
-        ' k8s_api_instance: %(api_instance)\n '
+        '%(asctime)s %(name)-12s %(levelname)-8s in function: %(func_name) \n' +
+        ' k8s_api_instance: %(api_instance)\n ' +
         'k8s_api_func: %(api_func)\n message: %(message)s')
 handler.setFormatter(formatter)
 logger.addHandler(handler)
