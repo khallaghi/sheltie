@@ -34,10 +34,12 @@ def create_job(msg):
         api_response = api_instance.create_namespaced_job(msg.namespace, yaml_conf)
         logger.info(api_response)
     except ApiException as e:
-        logger.error("error_message: %s", e,
-                     api_instance='BatchV1Api',
-                     api_func='create_namespaced_job',
-                     func_name='create_job')
+        extra = {
+            'api_instance':'BatchV1Api',
+            'api_func':'create_namespaced_job',
+            'func_name':'create_job'
+        }
+        logger.error("error_message: %s", e, extra=extra)
         raise e
 
 
@@ -49,10 +51,12 @@ def delete_job(msg):
         api_response = api_instance.delete_namespaced_job(msg.name, msg.namespace, yaml_conf)
         logger.info(api_response)
     except ApiException as e:
-        logger.error("error_message: %s", e,
-                     api_instance='BatchV1Api',
-                     api_func='delete_namespaced_job',
-                     func_name='delete_job')
+        extra = {
+            'api_instance':'BatchV1Api',
+            'api_func':'delete_namespaced_job',
+            'func_name':'delete_job'
+        }
+        logger.error("error_message: %s", e, extra=extra)
         raise e
 
 
@@ -64,10 +68,12 @@ def create_deployment(msg):
         api_response = k8s_beta.create_namespaced_deployment(msg.namespace, yaml_conf)
         logger.info(api_response)
     except ApiException as e:
-        logger.error("error_message: %s", e,
-                     api_instance='ExtensionsV1beta1Api',
-                     api_func='create_namespaced_deployment ',
-                     func_name='create_deployment')
+        extra = {
+            'api_instance': 'ExtensionsV1beta1Api',
+            'api_func': 'create_namespaced_deployment ',
+            'func_name': 'create_deployment'
+        }
+        logger.error("error_message: %s", e, extra=extra)
         raise e
 
 
@@ -79,10 +85,12 @@ def delete_deployment(msg):
         api_response = k8s_beta.delete_namespaced_deployment(msg.name, msg.namespace, yaml_conf)
         logger.info(api_response)
     except ApiException as e:
-        logger.error("error_message: %s", e,
-                     api_instance='ExtensionsV1beta1Api',
-                     api_func='delete_namespaced_deployment',
-                     func_name='delete_deployment')
+        extra = {
+            'api_instance': 'ExtensionsV1beta1Api',
+            'api_func': 'delete_namespaced_deployment',
+            'func_name': 'delete_deployment'
+        }
+        logger.error("error_message: %s", e, extra=extra)
         raise e
 
 
