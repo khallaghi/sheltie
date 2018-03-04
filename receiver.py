@@ -1,6 +1,7 @@
 import pika
 import json
 from k8s.client import handle_request
+from message import Message
 credentials = pika.PlainCredentials('test', 'test')
 parameters = pika.ConnectionParameters(host='localhost',
                                        port=5672,
@@ -15,7 +16,7 @@ channel.queue_declare(queue='command', durable=True)
 def callback(ch, method, properties, body):
     print(" [x] Received %r" % body)
     msg = json.loads(body)
-    handle_request(msg)
+    handle_request(Message(**msg))
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 channel.basic_qos(prefetch_count=1)
