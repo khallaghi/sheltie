@@ -28,7 +28,8 @@ class Message:
         self.id = kwargs['id']
         self.file_name = kwargs['file_name']
         self.kind = kwargs['kind']
-        self.namespace = kwargs['namespace'] | 'default'
+        self.namespace = kwargs['namespace'] 
+        self.command = kwargs['command']
 
     def to_json(self):
         return json.dumps(self.__dict__)

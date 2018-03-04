@@ -45,8 +45,8 @@ def create_job(msg):
     api_instance = client.BatchV1Api(client.ApiClient())
     try:
         api_response = api_instance.create_namespaced_job(msg.namespace, yaml_conf)
-        send_message(Success(msg.id))
         pprint(api_response)
+        send_message(Success(msg.id))
     except ApiException as e:
         send_message(Failure(msg.id, "Exception when calling BatchV1Api->create_namespaced_job: %s\n" % e))
 
