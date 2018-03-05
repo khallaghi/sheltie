@@ -90,16 +90,13 @@ def delete_deployment(msg):
 
 
 def handle_request(msg):
-    try:
-        if msg.kind == KIND['JOB']:
-            if msg.command == COMMAND['CREATE']:
-                return create_job(msg)
-            if msg.command == COMMAND['DELETE']:
-                return delete_job(msg)
-        if msg.kind == KIND['DEPLOYMENT']:
-            if msg.command == COMMAND['CREATE']:
-                return create_deployment(msg)
-            if msg.command == COMMAND['DELETE']:
-                return delete_deployment(msg)
-    except:
-        pass
+    if msg.kind == KIND['JOB']:
+        if msg.command == COMMAND['CREATE']:
+            return create_job(msg)
+        if msg.command == COMMAND['DELETE']:
+            return delete_job(msg)
+    if msg.kind == KIND['DEPLOYMENT']:
+        if msg.command == COMMAND['CREATE']:
+            return create_deployment(msg)
+        if msg.command == COMMAND['DELETE']:
+            return delete_deployment(msg)
