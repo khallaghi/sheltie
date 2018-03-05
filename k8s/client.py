@@ -7,20 +7,19 @@ from kubernetes import config as k8s_config
 from constants import KIND, COMMAND
 import config
 import logging
+
 FORMAT = '%(asctime)s %(name)-12s %(levelname)-8s in function: %(func_name)s ' +\
         'k8s_api_instance: %(api_instance)s ' +\
         'k8s_api_func: %(api_func)s message: %(message)s'
 
 logger = logging.getLogger()
-
-hdlr = logging.FileHandler('/var/tmp/sheltie.log')
+handler = logging.FileHandler(config.DEFAULT['LOG_PATH'])
 formatter = logging.Formatter(FORMAT)
-hdlr.setFormatter(formatter)
-logger.addHandler(hdlr) 
-logger.setLevel(logging.WARNING)
+handler .setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.ERROR)
 
 ROOT_DIR = config.DEFAULT['ROOT_DIR']
-
 
 kubectl_config = config.DEFAULT['KUBECTL_CONFIG']
 k8s_config.load_kube_config(os.path.join(kubectl_config))

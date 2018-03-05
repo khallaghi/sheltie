@@ -1,6 +1,7 @@
 DEFAULT = {
     'ROOT_DIR': '/root/yaml/',
-    'KUBECTL_CONFIG': '/etc/kubernetes/admin.conf'
+    'KUBECTL_CONFIG': '/etc/kubernetes/admin.conf',
+    'LOG_PATH': '/var/tmp/sheltie.log'
 }
 
 MQ_CONFIG = {
