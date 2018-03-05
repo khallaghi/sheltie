@@ -34,7 +34,7 @@ def create_job(msg):
             'api_func':'create_namespaced_job',
             'func_name':'create_job'
         }
-        #logger.error("error_message: %s", e, extra=extra)
+        logger.error("error_message: %s", e, extra=extra)
         raise e
 
 
@@ -51,7 +51,7 @@ def delete_job(msg):
             'api_func':'delete_namespaced_job',
             'func_name':'delete_job'
         }
-        #logger.error("error_message: %s", e, extra=extra)
+        logger.error("error_message: %s", e, extra=extra)
         raise e
 
 
@@ -68,7 +68,7 @@ def create_deployment(msg):
             'api_func': 'create_namespaced_deployment ',
             'func_name': 'create_deployment'
         }
-        #logger.error("error_message: %s", e, extra=extra)
+        logger.error("error_message: %s", e, extra=extra)
         raise e
 
 
@@ -85,7 +85,7 @@ def delete_deployment(msg):
             'api_func': 'delete_namespaced_deployment',
             'func_name': 'delete_deployment'
         }
-        #logger.error("error_message: %s", e, extra=extra)
+        logger.error("error_message: %s", e, extra=extra)
         raise e
 
 

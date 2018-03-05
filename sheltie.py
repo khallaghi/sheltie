@@ -4,8 +4,6 @@ from message import Message, Success, Failure
 from message_broker import receiver, send_message
 import config
 
-SUCCESS = 0
-
 
 def callback(ch, method, properties, body):
     _id = -1
@@ -21,7 +19,6 @@ def callback(ch, method, properties, body):
     except Exception as e:
         print(e)
         send_message(Failure(str(_id), message=str(e)))
-
 
 
 if __name__ == '__main__':
