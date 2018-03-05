@@ -15,3 +15,4 @@ def send_message(message):
                           properties=pika.BasicProperties(
                              delivery_mode=2
                           ))
+    connection.close()
