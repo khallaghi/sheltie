@@ -30,6 +30,7 @@ class Message:
         self.kind = kwargs['kind']
         self.namespace = kwargs['namespace'] 
         self.command = kwargs['command']
+        self.args = kwargs['args']
 
     def to_json(self):
         return json.dumps(self.__dict__)

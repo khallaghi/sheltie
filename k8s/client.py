@@ -7,6 +7,7 @@ from kubernetes import config as k8s_config
 from constants import KIND, COMMAND
 import config
 import logging
+import util
 
 FORMAT = '%(asctime)s %(name)-12s %(levelname)-8s in function: %(func_name)s ' +\
         'k8s_api_instance: %(api_instance)s ' +\
@@ -28,6 +29,7 @@ k8s_config.load_kube_config(os.path.join(kubectl_config))
 def create_job(msg):
     yaml_file = open(ROOT_DIR + msg.file_name, 'r+')
     yaml_conf = yaml.load(yaml_file)
+    yaml_conf = util.change_yaml(yaml_conf, msg.args)
     api_instance = client.BatchV1Api(client.ApiClient())
     try:
         api_response = api_instance.create_namespaced_job(msg.namespace, yaml_conf)
@@ -62,6 +64,7 @@ def delete_job(msg):
 def create_deployment(msg):
     yaml_file = open(ROOT_DIR + msg.file_name, 'r+')
     yaml_conf = yaml.load(yaml_file)
+    yaml_conf = util.change_yaml(yaml_conf, msg.args)
     k8s_beta = client.ExtensionsV1beta1Api()
     try:
         api_response = k8s_beta.create_namespaced_deployment(msg.namespace, yaml_conf)
