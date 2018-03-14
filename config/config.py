@@ -1,12 +1,12 @@
 DEFAULT = {
-    'ROOT_DIR': '/root/yaml/',
+    'ROOT_DIR': '/root/automation/',
     'KUBECTL_CONFIG': '/etc/kubernetes/admin.conf',
     'LOG_PATH': '/var/tmp/sheltie.log'
 }
 
 MQ_CONFIG = {
-    'user': 'test',
-    'pass': 'test',
+    'user': 'guest',
+    'pass': 'guest',
     'host': 'localhost',
     'port': 5672,
     'vhost': '/'
