@@ -9,7 +9,8 @@ MQ_CONFIG = {
     'pass': 'guest',
     'host': 'localhost',
     'port': 5672,
-    'vhost': '/'
+    'vhost': '/',
+    'heartbeat_interval': 0
 }
 
 QUEUE_CONFIG = {

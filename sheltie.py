@@ -5,7 +5,7 @@ from message_broker import receiver, send_message
 import config
 
 
-def callback(ch, method, properties, body):
+def callback(ch, method, body):
     _id = -1
     try:
         print(" [x] Received %r" % body)
@@ -22,5 +22,5 @@ def callback(ch, method, properties, body):
 
 
 if __name__ == '__main__':
-    receiver(callback, config.QUEUE_CONFIG['command'])
+    receiver(config.QUEUE_CONFIG['command'], callback)
 

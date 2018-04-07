@@ -9,9 +9,10 @@ import config
 import logging
 import util
 
-FORMAT = '%(asctime)s %(name)-12s %(levelname)-8s in function: %(func_name)s ' +\
-        'k8s_api_instance: %(api_instance)s ' +\
-        'k8s_api_func: %(api_func)s message: %(message)s'
+FORMAT = '%(asctime)s %(name)-12s %(levelname)-8s'
+#'function: %(func_name)s ' +\
+#        'k8s_api_instance: %(api_instance)s ' +\
+#        'k8s_api_func: %(api_func)s message: %(message)s'
 
 logger = logging.getLogger()
 handler = logging.FileHandler(config.DEFAULT['LOG_PATH'])
