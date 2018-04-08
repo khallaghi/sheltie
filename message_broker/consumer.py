@@ -28,7 +28,7 @@ class Consumer(object):
         self.exchange = exchange
         self.callable = callable_func
         self.queue = ''
-        self.type = 'fanout'
+        self.type = 'direct'
         self.channel = None
         self.consumer_tag = None
 

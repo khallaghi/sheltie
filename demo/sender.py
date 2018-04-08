@@ -15,7 +15,7 @@ channel = connection.channel()
 
 
 channel.exchange_declare(exchange='command',
-                         exchange_type='fanout')
+                         exchange_type='direct')
 
 message = ' '.join(sys.argv[1:]) or "info: Hello World!"
 channel.basic_publish(exchange='command',
