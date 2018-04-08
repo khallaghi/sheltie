@@ -1,15 +1,15 @@
 import json
 from k8s.client import handle_request
 from message import Message, Success, Failure
-from message_broker import receiver, send_message
+from message_broker import Consumer, send_message
 import config
 
 
-def callback(ch, method, body):
+def callback(channel, method, body):
     _id = -1
     try:
         print(" [x] Received %r" % body)
-        ch.basic_ack(delivery_tag=method.delivery_tag)
+        channel.basic_ack(delivery_tag=method.delivery_tag)
         pure_msg = json.loads(body)
         msg = Message(**pure_msg)
         _id = msg.id
@@ -22,5 +22,7 @@ def callback(ch, method, body):
 
 
 if __name__ == '__main__':
-    receiver(config.QUEUE_CONFIG['command'], callback)
+    c = Consumer(config.QUEUE_CONFIG['command'], callback)
+    c.run()
+    #receiver(config.QUEUE_CONFIG['command'], callback)
 

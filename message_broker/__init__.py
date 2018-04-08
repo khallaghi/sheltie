@@ -1,2 +1,2 @@
 from send import *
-from receiver import *
+from consumer import *
