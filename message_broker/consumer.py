@@ -28,7 +28,7 @@ class Consumer(object):
         self.exchange = exchange
         self.callable = callable_func
         self.queue = ''
-        self.type = 'topic'
+        self.type = 'fanout'
         self.channel = None
         self.consumer_tag = None
 
@@ -55,7 +55,8 @@ class Consumer(object):
         self.channel = channel
         self.channel.add_on_close_callback(self.on_channel_closed)
         self.channel.exchange_declare(self.on_exchange_declareok,
-                                      exchange=self.exchange)
+                                      exchange=self.exchange,
+                                      exchange_type=self.type)
 
     def on_channel_closed(self, channel, reply_code, reply_text):
         """
@@ -74,7 +75,7 @@ class Consumer(object):
         Called by pika when RabbitMQ has finished the Exchange.Declare
         command.
         """
-        self.channel.queue_declare(self.on_queue_declareok, self.queue)
+        self.channel.queue_declare(self.on_queue_declareok, self.queue, exclusive=True)
 
     def on_queue_declareok(self, frame):
         """
