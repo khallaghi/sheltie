@@ -98,6 +98,7 @@ class Consumer(object):
         Start consuming messages.
         """
         self.channel.add_on_cancel_callback(self.on_consumer_cancelled)
+        self.channel.basic_qos(prefetch_count=1)
         self.consumer_tag = self.channel.basic_consume(self.on_message,
                                                        self.queue)
 

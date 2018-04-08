@@ -14,7 +14,7 @@ def callback(channel, method, body):
         msg = Message(**pure_msg)
         _id = msg.id
         handle_request(msg)
-        send_message(Success(str(_id)))
+        #send_message(Success(str(_id)))
         print('DONE')
     except Exception as e:
         print(e)
