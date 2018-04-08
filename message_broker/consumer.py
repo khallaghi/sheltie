@@ -55,8 +55,7 @@ class Consumer(object):
         self.channel = channel
         self.channel.add_on_close_callback(self.on_channel_closed)
         self.channel.exchange_declare(self.on_exchange_declareok,
-                                      exchange=self.exchange,
-                                      type=self.type)
+                                      exchange=self.exchange)
 
     def on_channel_closed(self, channel, reply_code, reply_text):
         """
